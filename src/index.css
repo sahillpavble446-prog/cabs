@@ -26,24 +26,24 @@ All colors MUST be HSL.
     --muted: 220 15% 96%;
     --muted-foreground: 220 10% 50%;
 
-    --accent: 14 90% 60%;
+    --accent: 210 100% 45%;
     --accent-foreground: 0 0% 100%;
 
-    --gold: 45 100% 60%;
-    --gold-foreground: 220 70% 15%;
+    --gold: 215 25% 35%;
+    --gold-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 15% 88%;
     --input: 220 15% 88%;
-    --ring: 220 70% 15%;
+    --ring: 210 100% 45%;
 
     --radius: 0.75rem;
 
-    --gradient-hero: linear-gradient(135deg, hsl(220 70% 15% / 0.9), hsl(220 70% 25% / 0.85));
-    --gradient-accent: linear-gradient(135deg, hsl(14 90% 60%), hsl(25 95% 65%));
-    --gradient-gold: linear-gradient(135deg, hsl(45 100% 60%), hsl(38 100% 55%));
+    --gradient-hero: linear-gradient(135deg, hsl(220 70% 15% / 0.9), hsl(210 70% 25% / 0.85));
+    --gradient-accent: linear-gradient(135deg, hsl(210 100% 45%), hsl(215 90% 50%));
+    --gradient-gold: linear-gradient(135deg, hsl(215 25% 35%), hsl(220 30% 40%));
 
     --shadow-sm: 0 2px 8px hsl(220 70% 15% / 0.08);
     --shadow-md: 0 4px 16px hsl(220 70% 15% / 0.12);
@@ -72,11 +72,11 @@ All colors MUST be HSL.
     --muted: 220 50% 18%;
     --muted-foreground: 220 15% 70%;
 
-    --accent: 14 90% 60%;
+    --accent: 210 100% 45%;
     --accent-foreground: 0 0% 100%;
 
-    --gold: 45 100% 60%;
-    --gold-foreground: 220 70% 15%;
+    --gold: 215 25% 35%;
+    --gold-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 98%;

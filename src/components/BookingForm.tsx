@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -12,6 +13,7 @@ import { SearchBox } from "@mapbox/search-js-react";
 const ACCESS_TOKEN = "pk.eyJ1Ijoic2FoaWwwOThuIiwiYSI6ImNtaDNoYTUyOTJ0Y24yd3MydXNpYjFvdXEifQ.2nqdddpihwREPiO6KBljeA";
 
 const BookingForm = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("local");
   const [formData, setFormData] = useState({
     travelers: "1-4",
@@ -29,23 +31,10 @@ const BookingForm = () => {
       return;
     }
 
-    const tripType =
-      activeTab === "outstation"
-        ? "Outstation"
-        : activeTab === "local"
-        ? "Within City"
-        : "Airport Transfer";
+    const tripType = "Within City";
 
     let message = `Hi! I'd like to book a ${tripType} trip:\nTraveler(s): ${formData.travelers} members\n`;
-
-    if (activeTab === "outstation") {
-      message += `Pickup Location: ${formData.pickupLocation}\nDrop-off Location: ${formData.dropLocation}\nNumber of Days: ${formData.days}\n`;
-    } else if (activeTab === "local") {
-      message += `Pickup Location: ${formData.pickupLocation}\nDrop-off Location: ${formData.dropLocation}\nNumber of Hours: ${formData.hours}\n`;
-    } else {
-      message += `Pickup Location: ${formData.pickupLocation}\nDrop-off Location: ${formData.dropLocation}\n`;
-    }
-
+    message += `Pickup Location: ${formData.pickupLocation}\nDrop-off Location: ${formData.dropLocation}\nNumber of Hours: ${formData.hours}\n`;
     message += `Pickup Date: ${formData.pickupDate}\nPickup Time: ${formData.pickupTime}`;
 
     const whatsappUrl = `https://wa.me/919900987878?text=${encodeURIComponent(message)}`;
@@ -65,9 +54,9 @@ const BookingForm = () => {
             {/* Tabs */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
               <Button
-                variant={activeTab === "outstation" ? "accent" : "secondary"}
+                variant="accent"
                 size="lg"
-                onClick={() => setActiveTab("outstation")}
+                onClick={() => navigate("/outstation-booking")}
                 className="flex-1 col-span-1"
               >
                 OUT STATION
@@ -83,9 +72,9 @@ const BookingForm = () => {
               </Button>
 
               <Button
-                variant={activeTab === "airport" ? "accent" : "secondary"}
+                variant="accent"
                 size="lg"
-                onClick={() => setActiveTab("airport")}
+                onClick={() => navigate("/airport-booking")}
                 className="flex-1 col-span-2 sm:col-span-1"
               >
                 AIRPORT TRANSFER
@@ -118,145 +107,68 @@ const BookingForm = () => {
                 </Select>
               </div>
 
-              {/* Outstation Fields */}
-              {activeTab === "outstation" && (
-                <>
-                  <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-2">
-                    <Label className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
-                      Pickup Location
-                    </Label>
-                    <SearchBox
-                      accessToken={ACCESS_TOKEN}
-                      value={formData.pickupLocation}
-                      onChange={(value) => setFormData(prev => ({ ...prev, pickupLocation: value }))}
-                      onRetrieve={(result) => {
-                        const placeName = result.features[0]?.place_name;
-                        if (placeName) {
-                          setFormData(prev => ({ ...prev, pickupLocation: placeName }));
-                        }
-                      }}
-                      options={{ country: "IN" }}
-                      placeholder="Enter pickup location"
-                    />
-                  </div>
+              {/* Within City Fields */}
+              <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-2">
+                <Label className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  Pickup Location
+                </Label>
+                <SearchBox
+                  accessToken={ACCESS_TOKEN}
+                  value={formData.pickupLocation}
+                  onChange={(value) => setFormData(prev => ({ ...prev, pickupLocation: value }))}
+                  onRetrieve={(result) => {
+                    const placeName = result.features[0]?.place_name;
+                    if (placeName) {
+                      setFormData(prev => ({ ...prev, pickupLocation: placeName }));
+                    }
+                  }}
+                  options={{ country: "IN" }}
+                  placeholder="Enter pickup location"
+                />
+              </div>
 
-                  <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-2">
-                    <Label className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
-                      Drop-off Location
-                    </Label>
-                    <SearchBox
-                      accessToken={ACCESS_TOKEN}
-                      value={formData.dropLocation}
-                      onChange={(value) => setFormData(prev => ({ ...prev, dropLocation: value }))}
-                      onRetrieve={(result) => {
-                        const placeName = result.features[0]?.place_name;
-                        if (placeName) {
-                          setFormData(prev => ({ ...prev, dropLocation: placeName }));
-                        }
-                      }}
-                      options={{ country: "IN" }}
-                      placeholder="Enter drop-off location"
-                    />
-                  </div>
+              <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-2">
+                <Label className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  Drop-off Location
+                </Label>
+                <SearchBox
+                  accessToken={ACCESS_TOKEN}
+                  value={formData.dropLocation}
+                  onChange={(value) => setFormData(prev => ({ ...prev, dropLocation: value }))}
+                  onRetrieve={(result) => {
+                    const placeName = result.features[0]?.place_name;
+                    if (placeName) {
+                      setFormData(prev => ({ ...prev, dropLocation: placeName }));
+                    }
+                  }}
+                  options={{ country: "IN" }}
+                  placeholder="Enter drop-off location"
+                />
+              </div>
 
-                  {/* Number of Days */}
-                  <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-1">
-                    <Label className="flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      Number of Days
-                    </Label>
-                    <Select
-                      value={formData.days}
-                      onValueChange={(value) => setFormData({ ...formData, days: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">1 Day</SelectItem>
-                        <SelectItem value="2">2 Days</SelectItem>
-                        <SelectItem value="3">3 Days</SelectItem>
-                        <SelectItem value="4">4 Days</SelectItem>
-                        <SelectItem value="5">5 Days</SelectItem>
-                        <SelectItem value="6">6 Days</SelectItem>
-                        <SelectItem value="7">7 Days</SelectItem>
-                        <SelectItem value="custom">Custom (Need more days)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </>
-              )}
-
-              {/* Within City / Airport Fields */}
-              {activeTab !== "outstation" && (
-                <>
-                  <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-2">
-                    <Label className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
-                      Pickup Location
-                    </Label>
-                    <SearchBox
-                      accessToken={ACCESS_TOKEN}
-                      value={formData.pickupLocation}
-                      onChange={(value) => setFormData(prev => ({ ...prev, pickupLocation: value }))}
-                      onRetrieve={(result) => {
-                        const placeName = result.features[0]?.place_name;
-                        if (placeName) {
-                          setFormData(prev => ({ ...prev, pickupLocation: placeName }));
-                        }
-                      }}
-                      options={{ country: "IN" }}
-                      placeholder="Enter pickup location"
-                    />
-                  </div>
-
-                  <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-2">
-                    <Label className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4" />
-                      Drop-off Location
-                    </Label>
-                    <SearchBox
-                      accessToken={ACCESS_TOKEN}
-                      value={formData.dropLocation}
-                      onChange={(value) => setFormData(prev => ({ ...prev, dropLocation: value }))}
-                      onRetrieve={(result) => {
-                        const placeName = result.features[0]?.place_name;
-                        if (placeName) {
-                          setFormData(prev => ({ ...prev, dropLocation: placeName }));
-                        }
-                      }}
-                      options={{ country: "IN" }}
-                      placeholder="Enter drop-off location"
-                    />
-                  </div>
-
-                  {/* Number of Hours for Within City */}
-                  {activeTab === "local" && (
-                    <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-1">
-                      <Label className="flex items-center gap-2">
-                        <Clock className="h-4 w-4" />
-                        Number of Hours
-                      </Label>
-                      <Select
-                        value={formData.hours}
-                        onValueChange={(value) => setFormData({ ...formData, hours: value })}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="2">2 Hours</SelectItem>
-                          <SelectItem value="4">4 Hours</SelectItem>
-                          <SelectItem value="6">6 Hours</SelectItem>
-                          <SelectItem value="custom">Custom (Need more hours)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                </>
-              )}
+              {/* Number of Hours for Within City */}
+              <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-1">
+                <Label className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Number of Hours
+                </Label>
+                <Select
+                  value={formData.hours}
+                  onValueChange={(value) => setFormData({ ...formData, hours: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="2">2 Hours</SelectItem>
+                    <SelectItem value="4">4 Hours</SelectItem>
+                    <SelectItem value="6">6 Hours</SelectItem>
+                    <SelectItem value="custom">Custom (Need more hours)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
               {/* Pickup Date */}
               <div className="space-y-2 col-span-1 sm:col-span-1 lg:col-span-1">
